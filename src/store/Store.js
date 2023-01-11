@@ -21,7 +21,7 @@ const defaultOpts = {
   serializer: noop,
   deserializer: noop,
   patchStrategy: shallowDiff,
-  maxReconnects: 10
+  maxReconnects: 999
 };
 
 class Store {
@@ -66,7 +66,7 @@ class Store {
     this.dispatch = this.dispatch.bind(this); // add this context to dispatch
 
     // finally connect
-    this.connect(deserializer);
+    if (!globalThis.serviceWorker){ this.connect(deserializer); }
   }
 
   /**
@@ -85,6 +85,7 @@ class Store {
     });
 
     this.serializedPortListener = withDeserializer(deserializer)((...args) => {
+      attempts = 0;
       this.port.onMessage.addListener(...args);
     });
 
