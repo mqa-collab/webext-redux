@@ -74,6 +74,7 @@ class Store {
    * this store. Automatically reconnects when port becomes disconnected.
    */
   connect(deserializer, attempts = 0) {
+    console.log("connect attempts", attempts);
     if (attempts > this.maxReconnects) {
       throw new Error("Too many connection attempts");
     }
